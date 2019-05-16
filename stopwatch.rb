@@ -11,9 +11,10 @@ begin
 	message.addstr("This is a timer.")
 	message.refresh
 
-	(1..5).each do |i|
+	max = 5
+	(1..max).each do |i|
 		timer.clear
-		timer.addstr(i.to_s)
+		timer.addstr("#{max - i} / #{max}")
 		timer.refresh
 		sleep 1
 	end
