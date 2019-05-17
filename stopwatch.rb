@@ -3,7 +3,8 @@ def time_interval
 	ENV['TIME_INTERVAL'].to_f || 1
 end
 
-def print_timer(message_window,timer_window,max_seconds,message)
+def print_timer(message_window,timer_window,max_minutes,message)
+	max_seconds = 60 * max_minutes
 	message_window.clear
 	message_window.addstr(message)
 	message_window.refresh
@@ -13,7 +14,7 @@ def print_timer(message_window,timer_window,max_seconds,message)
 		minutes = seconds_remaining / 60
 		seconds = seconds_remaining % 60
 		timer_window.clear
-		timer_window.addstr("#{minutes}:#{seconds} / #{max_seconds}")
+		timer_window.addstr("#{minutes}:#{seconds} / #{max_minutes.to_i}:#{(max_seconds % 60).to_i}")
 		timer_window.refresh
 		sleep time_interval
 	end
@@ -28,11 +29,9 @@ begin
 
 	timer_window = Curses::Window.new(x, y, x + 1, y)
 
-	mappings = { "push ups" => 1, "shadow boxing" => 3, "sit ups" => 1 }
-	max = 0.1
+	mappings = { "push ups" => 1.5, "shadow boxing" => 3, "sit ups" => 1 }
 	mappings.each_pair do |message, max_minutes|
-		max_seconds = max_minutes * 60
-		print_timer(message_window, timer_window, max_seconds, message)
+		print_timer(message_window, timer_window, max_minutes, message)
 	end
 
 	3.times do
