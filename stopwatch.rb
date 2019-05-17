@@ -20,27 +20,31 @@ def print_timer(message_window,timer_window,max_minutes,message)
 	end
 end
 
+def flash(message_window,message)
+	message_window.clear
+	message_window.refresh
+	sleep time_interval / 10.0
+	message_window.addstr(message)
+	message_window.refresh
+	sleep time_interval / 2.0
+end
+
 Curses.init_screen
 
 begin
 	x = Curses.lines / 2
 	y = Curses.cols / 2
 	message_window = Curses::Window.new(x,y,x,y-1)
-
 	timer_window = Curses::Window.new(x, y, x + 1, y)
 
 	mappings = { "push ups" => 1.5, "shadow boxing" => 3, "sit ups" => 1 }
 	mappings.each_pair do |message, max_minutes|
 		print_timer(message_window, timer_window, max_minutes, message)
+		flash(message_window,"")
 	end
 
 	3.times do
-		message_window.clear
-		message_window.refresh
-		sleep time_interval / 10.0
-		message_window.addstr("Time's up!!!")
-		message_window.refresh
-		sleep time_interval / 2.0
+		flash(message_window,"Time's up!!!")
 	end
 ensure
 	Curses.close_screen
