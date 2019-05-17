@@ -14,7 +14,7 @@ def print_timer(message_window,timer_window,max_minutes,message)
 		minutes = seconds_remaining / 60
 		seconds = seconds_remaining % 60
 		timer_window.clear
-		timer_window.addstr("#{minutes}:#{seconds} / #{max_minutes.to_i}:#{(max_seconds % 60).to_i}")
+		timer_window.addstr("#{minutes}:#{sprintf('%02d',seconds)} / #{max_minutes.to_i}:#{sprintf('%02d',(max_seconds % 60).to_i)}")
 		timer_window.refresh
 		sleep time_interval
 	end
