@@ -26,7 +26,7 @@ begin
 	y = Curses.cols / 2
 	message_window = Curses::Window.new(x,y,x,y-1)
 
-	timer_window = Curses::Window.new(x, y, x + 1, y + 1)
+	timer_window = Curses::Window.new(x, y, x + 1, y)
 
 	mappings = { "push ups" => 1, "shadow boxing" => 3, "sit ups" => 1 }
 	max = 0.1
