@@ -1,36 +1,46 @@
 require 'curses'
-Curses.init_screen
-time_interval = 1
+def time_interval
+	ENV['TIME_INTERVAL'].to_f || 1
+end
 
-begin
-	x = Curses.lines / 2  # We will center our text
-	y = Curses.cols / 2
-	# Curses.setpos(1, 1)  # Move the cursor to the center of the screen
-	message = Curses::Window.new(x,y,x,y-1)
+def print_timer(message_window,timer_window,max_seconds,message)
+	message_window.clear
+	message_window.addstr(message)
+	message_window.refresh
 
-	timer = Curses::Window.new(x, y, x + 1, y + 1)
-
-	message.addstr("This is a timer.")
-	message.refresh
-
-	mappings = { "push ups" => 1, "shadow boxing" => 3, "sit ups" => 1 }
-	max = 0.1
-	max_seconds = max * 60
 	(0..max_seconds).each do |i|
 		seconds_remaining = (max_seconds -i).to_i
 		minutes = seconds_remaining / 60
 		seconds = seconds_remaining % 60
-		timer.clear
-		timer.addstr("#{minutes}:#{seconds} / #{max_seconds}")
-		timer.refresh
+		timer_window.clear
+		timer_window.addstr("#{minutes}:#{seconds} / #{max_seconds}")
+		timer_window.refresh
 		sleep time_interval
 	end
+end
+
+Curses.init_screen
+
+begin
+	x = Curses.lines / 2
+	y = Curses.cols / 2
+	message_window = Curses::Window.new(x,y,x,y-1)
+
+	timer_window = Curses::Window.new(x, y, x + 1, y + 1)
+
+	mappings = { "push ups" => 1, "shadow boxing" => 3, "sit ups" => 1 }
+	max = 0.1
+	mappings.each_pair do |message, max_minutes|
+		max_seconds = max_minutes * 60
+		print_timer(message_window, timer_window, max_seconds, message)
+	end
+
 	3.times do
-		message.clear
-		message.refresh
+		message_window.clear
+		message_window.refresh
 		sleep time_interval / 10.0
-		message.addstr("Time's up!!!")
-		message.refresh
+		message_window.addstr("Time's up!!!")
+		message_window.refresh
 		sleep time_interval / 2.0
 	end
 ensure
