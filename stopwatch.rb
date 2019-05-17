@@ -1,6 +1,6 @@
 require 'curses'
 def time_interval
-  ENV['TIME_INTERVAL'].to_f || 1
+  (ENV['TIME_INTERVAL'] || 1).to_f
 end
 
 def print_timer(message_window,timer_window,max_minutes,message)
